@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio Premium - Gestionnaire de Projet</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f0f4ff 0%, #ffffff 100%);
+      color: #222;
+      padding: 40px 20px;
+      text-align: center;
+      position: relative;
+      min-height: 100vh;
+    }
+    h1 {
+      font-weight: 700;
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      color: #004e92;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    }
+    .gallery-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Bouton retour */
+    .back-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #00bcd4;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      border-radius: 25px;
+      box-shadow: 0 4px 15px rgba(0,188,212,0.4);
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+      z-index: 1000;
+    }
+    .back-btn:hover {
+      background: #0097a7;
+    }
+
+    /* Image principale */
+    .main-image-container {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 15px 30px rgba(0, 78, 146, 0.3);
+      cursor: pointer;
+      user-select: none;
+    }
+    .main-image-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+      /* transition retirée */
+      border-radius: 18px;
+      filter: drop-shadow(0 10px 15px rgba(0,78,146,0.2));
+    }
+    /* Suppression de l'effet zoom */
+    /* .main-image-container:hover img {
+      transform: scale(1.05);
+      filter: drop-shadow(0 15px 20px rgba(0,78,146,0.3));
+    } */
+
+    /* Flèches */
+    .nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 78, 146, 0.4);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      border: none;
+      color: white;
+      font-size: 2.4rem;
+      cursor: pointer;
+      user-select: none;
+      opacity: 0;
+      transition: opacity 0.3s ease, background-color 0.3s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0,78,146,0.3);
+      z-index: 10;
+    }
+    .main-image-container:hover .nav-arrow {
+      opacity: 1;
+    }
+    .nav-arrow:hover {
+      background: rgba(0, 78, 146, 0.8);
+    }
+    .nav-arrow.left {
+      left: 15px;
+    }
+    .nav-arrow.right {
+      right: 15px;
+    }
+
+    /* Texte descriptif en surimpression */
+    .image-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 15px 25px;
+      background: linear-gradient(0deg, rgba(0,78,146,0.75), transparent);
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-align: left;
+      border-bottom-left-radius: 18px;
+      border-bottom-right-radius: 18px;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* Miniatures horizontales */
+    .thumbnail-container {
+      margin-top: 25px;
+      display: flex;
+      gap: 15px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      scrollbar-width: thin;
+      scrollbar-color: #004e92 #e0e0e0;
+    }
+    .thumbnail-container::-webkit-scrollbar {
+      height: 8px;
+    }
+    .thumbnail-container::-webkit-scrollbar-track {
+      background: #e0e0e0;
+      border-radius: 10px;
+    }
+    .thumbnail-container::-webkit-scrollbar-thumb {
+      background-color: #004e92;
+      border-radius: 10px;
+    }
+
+    .thumbnail-container img {
+      height: 90px;
+      width: 140px;
+      object-fit: cover;
+      border-radius: 14px;
+      cursor: pointer;
+      border: 3px solid transparent;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+    .thumbnail-container img:hover {
+      transform: scale(1.12);
+      box-shadow: 0 6px 15px rgba(0,78,146,0.5);
+    }
+    .thumbnail-container img.active {
+      border-color: #004e92;
+      transform: scale(1.18);
+      box-shadow: 0 8px 22px rgba(0,78,146,0.8);
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .thumbnail-container img {
+        height: 70px;
+        width: 110px;
+      }
+      .nav-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 1.8rem;
+      }
+      .back-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        top: 15px;
+        right: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back-btn" aria-label="Retour à la page principale">← Retour au site</a>
+
+  <h1>Gestionnaire de Projet</h1>
+
+  <div class="gallery-container" aria-label="Galerie de projets">
+    <div class="main-image-container" role="region" aria-live="polite" tabindex="0">
+      <button class="nav-arrow left" id="prevBtn" aria-label="Image précédente">&#10094;</button>
+      <img src="mainpage.png" alt="Capture écran gestionnaire de projet - tableau kanban" id="mainImage" />
+      <div class="image-caption" id="imageCaption">Interface intuitive et responsive avec gestion des tickets et planning</div>
+      <button class="nav-arrow right" id="nextBtn" aria-label="Image suivante">&#10095;</button>
+    </div>
+
+    <div class="thumbnail-container" id="thumbnails" aria-label="Miniatures des images">
+      <img src="login.png" alt="Tableau Kanban" data-index="0" class="active" />
+      <img src="mainpage.png" alt="Page de gestion des tickets" data-index="1" />
+      <img src="calendrier.png" alt="Détail d'un ticket" data-index="2" />
+    </div>
+  </div>
+
+  <script>
+    const images = [
+      {
+        src: 'login.png',
+        alt: 'Capture écran gestionnaire de projet - tableau kanban',
+        caption: 'Interface intuitive et responsive avec gestion des tickets et planning'
+      },
+      {
+        src: 'mainpage.png',
+        alt: 'Page de gestion des tickets',
+        caption: 'Suivi précis des projets et collaboration en temps réel'
+      },
+      {
+        src: 'calendrier.png',
+        alt: 'Planning de projet',
+        caption: 'Visualisation claire du planning et des échéances'
+      }
+    ];
+
+    let currentIndex = 0;
+
+    const mainImage = document.getElementById('mainImage');
+    const imageCaption = document.getElementById('imageCaption');
+    const thumbnails = document.getElementById('thumbnails');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function setActiveThumbnail(index) {
+      const thumbs = thumbnails.querySelectorAll('img');
+      thumbs.forEach(img => img.classList.remove('active'));
+      thumbs[index].classList.add('active');
+    }
+
+    function showImage(index) {
+      if (index < 0) index = images.length -1;
+      else if (index >= images.length) index = 0;
+
+      currentIndex = index;
+      mainImage.src = images[index].src;
+      mainImage.alt = images[index].alt;
+      imageCaption.textContent = images[index].caption;
+      setActiveThumbnail(index);
+      thumbnails.children[index].scrollIntoView({behavior: 'smooth', inline: 'center'});
+    }
+
+    prevBtn.addEventListener('click', () => showImage(currentIndex -1));
+    nextBtn.addEventListener('click', () => showImage(currentIndex +1));
+
+    thumbnails.querySelectorAll('img').forEach(img => {
+      img.addEventListener('click', e => {
+        const index = parseInt(e.target.dataset.index);
+        showImage(index);
+      });
+    });
+
+    // Support clavier (flèches gauche/droite)
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft') showImage(currentIndex -1);
+      else if (e.key === 'ArrowRight') showImage(currentIndex +1);
+    });
+
+    // Affichage initial
+    showImage(0);
+  </script>
+
+</body>
+</html>
